@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const routes = require('./routes/route');
+const routes = require("./routes/route");
 const Model = require("./models/model");
-const cors = require('cors')
-
+const cors = require("cors");
 
 const mongoString = process.env.DATABASE_URL;
+mongoose.set("strictQuery", false);
 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -20,33 +20,20 @@ database.once("connected", () => {
 });
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 app.use(express.json());
-app.use('/api', routes)
+app.use("/api", routes);
 
-app.post('/problems', function(req, res) {
+app.post("/problems", function (req, res) {
   // Insert JSON straight into MongoDB
- database.collection('Problems').insertOne(req.body, function (err, result) {
-     if (err)
-        res.send('Error');
-     else
-       res.send('Success');
-
- });
+  database.collection("Problems").insertOne(req.body);
 });
 
-app.post('/tests', function(req, res) {
+app.post("/tests", function (req, res) {
   // Insert JSON straight into MongoDB
- database.collection('tests').insertOne(req.body, function (err, result) {
-     if (err)
-        res.send('Error');
-     else
-       res.send('Success');
-
- });
+  database.collection("tests").insertOne(req.body);
 });
-
 
 app.listen(3000, () => {
   console.log(`Server Started at ${3000}`);
