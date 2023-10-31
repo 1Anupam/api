@@ -24,6 +24,18 @@ router.get("/users", async (req, res) => {
   }
 });
 
+router.post("/checkUser", async (req, res) => {
+  try {
+    const data = await userModel.find(req.body);
+    if (data.length == 0){
+      res.status(500).json({ message: error.message });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.get("/tests", async (req, res) => {
   try {
     const data = await testModel.find();
